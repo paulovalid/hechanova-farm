@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="h-full">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Hechanova Free Range Chicken Farm - Digital Ordering & Admin System</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
@@ -51,92 +51,100 @@
             #printable-receipt { position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 15px; }
             .no-print { display: none !important; }
         }
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #f7f2e8; border-radius: 4px; }
+        /* Mobile Touch & Scroll Optimizations */
+        * {
+            -webkit-tap-highlight-color: transparent;
+        }
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: #f7f2e8; }
         ::-webkit-scrollbar-thumb { background: #d5bea1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #733b10; }
     </style>
 </head>
-<body class="bg-farm-50 font-sans text-farm-900 antialiased min-h-screen flex flex-col selection:bg-farm-700 selection:text-white">
+<body class="bg-farm-50 font-sans text-farm-900 antialiased min-h-full flex flex-col pb-24 lg:pb-0 selection:bg-farm-700 selection:text-white">
 
+    <!-- Header / Navigation Bar -->
     <header class="sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-farm-200 shadow-sm">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                <div class="flex items-center gap-3.5 cursor-pointer group" onclick="switchView('customer')">
-                    <div class="relative w-14 h-14 rounded-full overflow-hidden border-2 border-farm-700 bg-white p-0.5 shadow-md shrink-0 group-hover:scale-105 transition-transform duration-200">
-                        <img src="Images/Hechanova Farm.jpg" alt="Hechanova Free Range Chicken Farm Logo" class="w-full h-full object-contain rounded-full" onerror="this.onerror=null; this.src='https://i.imgur.com/8KKWrZg.jpg';">
+        <div class="max-w-7xl mx-auto px-3.5 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                <div class="flex items-center gap-2.5 sm:gap-3.5 cursor-pointer group" onclick="switchView('customer')">
+                    <div class="relative w-11 h-11 sm:w-14 sm:h-14 rounded-full overflow-hidden border-2 border-farm-700 bg-white p-0.5 shadow-md shrink-0 group-hover:scale-105 transition-transform duration-200">
+                        <img src="Images/Hechanova Farm.jpg" alt="Hechanova Farm Logo" class="w-full h-full object-contain rounded-full" onerror="this.onerror=null; this.src='https://i.imgur.com/8KKWrZg.jpg';">
                     </div>
                     <div>
-                        <span class="text-xl sm:text-2xl font-extrabold font-serif tracking-tight text-farm-900 block leading-none">HECHANOVA</span>
-                        <span class="text-[10px] sm:text-xs text-farm-700 font-extrabold tracking-wider uppercase block mt-1">Free Range Chicken Farm and Menus</span>
-                        <span class="text-[10px] text-stone-500 hidden sm:block">Victorias City, Brgy. XI • Est. 2023</span>
+                        <span class="text-lg sm:text-2xl font-extrabold font-serif tracking-tight text-farm-900 block leading-none">HECHANOVA</span>
+                        <span class="text-[9px] sm:text-xs text-farm-700 font-extrabold tracking-wider uppercase block mt-0.5 sm:mt-1">Free Range Chicken Farm</span>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-2 sm:gap-4">
+                <div class="flex items-center gap-2">
                     <a href="tel:09502622470" class="hidden md:flex items-center gap-2 px-3.5 py-1.5 text-xs font-bold text-farm-800 bg-farm-100 border border-farm-200 rounded-xl hover:bg-farm-200 transition-all">
                         <i class="fa-solid fa-phone text-farm-700"></i>
                         <span>0950-262-2470</span>
                     </a>
 
                     <div class="bg-farm-100 p-1 rounded-xl flex gap-1 border border-farm-200">
-                        <button id="nav-customer-btn" onclick="switchView('customer')" class="px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all bg-farm-700 text-white shadow-sm">
-                            <i class="fa-solid fa-egg mr-1.5"></i> Order Menu
+                        <button id="nav-customer-btn" onclick="switchView('customer')" class="px-2.5 sm:px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all bg-farm-700 text-white shadow-sm">
+                            <i class="fa-solid fa-egg sm:mr-1.5"></i> <span class="hidden xs:inline">Order</span> Menu
                         </button>
-                        <button id="nav-admin-btn" onclick="openAdminAuth()" class="px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-farm-800 hover:text-farm-900 transition-all">
-                            <i class="fa-solid fa-user-shield mr-1.5"></i> Owner Dashboard
+                        <button id="nav-admin-btn" onclick="openAdminAuth()" class="px-2.5 sm:px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-farm-800 hover:text-farm-900 transition-all">
+                            <i class="fa-solid fa-user-shield sm:mr-1.5"></i> <span class="hidden xs:inline">Owner</span> Dashboard
                         </button>
                     </div>
-
-                    <button id="mobile-cart-btn" onclick="toggleCartDrawer(true)" class="relative p-2.5 bg-farm-100 border border-farm-200 hover:bg-farm-200 text-farm-800 rounded-xl transition-all lg:hidden">
-                        <i class="fa-solid fa-basket-shopping text-lg"></i>
-                        <span id="cart-badge-count" class="absolute -top-1 -right-1 bg-amber-600 text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
-                    </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+    <main class="flex-grow max-w-7xl w-full mx-auto px-3.5 sm:px-6 lg:px-8 py-4 sm:py-6">
 
         <!-- ================= CUSTOMER VIEW ================= -->
-        <section id="customer-view" class="block space-y-6">
-            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-farm-900 via-farm-800 to-farm-950 text-white p-6 sm:p-10 shadow-xl border border-farm-800">
-                <div class="relative z-10 max-w-2xl space-y-2">
+        <section id="customer-view" class="block space-y-4 sm:space-y-6">
+            <div class="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-r from-farm-900 via-farm-800 to-farm-950 text-white p-5 sm:p-10 shadow-xl border border-farm-800">
+                <div class="relative z-10 max-w-2xl space-y-1.5 sm:space-y-2">
                     <div class="flex flex-wrap items-center gap-2">
-                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
-                            <i class="fa-solid fa-leaf text-[10px]"></i> 100% Free Range and Hand-Crafted Menus
+                        <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] sm:text-xs font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
+                            <i class="fa-solid fa-leaf text-[9px]"></i> 100% Free Range Produce
                         </span>
-                        <span class="text-xs text-farm-200 font-medium">Victorias City, Brgy. XI</span>
+                        <span class="text-[11px] sm:text-xs text-farm-200 font-medium">Victorias City, Brgy. XI</span>
                     </div>
-                    <h1 class="text-3xl sm:text-5xl font-extrabold font-serif tracking-tight leading-tight">
-                        Fresh Eggs & Menus, <br><span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-200">Delivered Fresh Daily</span>
+                    <h1 class="text-2xl sm:text-5xl font-extrabold font-serif tracking-tight leading-tight">
+                        Fresh Eggs & Menus, <br class="hidden sm:block"><span class="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-amber-200">Delivered Fresh Daily</span>
                     </h1>
                     <p class="text-farm-200 text-xs sm:text-sm leading-relaxed max-w-xl">
-                        Hand-raised free range chickens Eggs and Menus. Select your farm items and Menus below, place your order online, receive your receipt immediately, and pay via Cash or QR Code!
+                        Hand-raised free range chickens, eggs, and freshly crafted farm menus. Select items below, place your order online, receive a digital receipt, and pay via Cash or QR!
                     </p>
                 </div>
             </div>
 
-            <div class="flex flex-col md:flex-row gap-4 items-center justify-between sticky top-20 z-20 bg-farm-50/90 backdrop-blur-md py-3">
-                <div class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-2 md:pb-0 no-scrollbar" id="category-bar"></div>
+            <!-- Sticky Category Filter & Mobile Search Bar -->
+            <div class="flex flex-col md:flex-row gap-3 items-center justify-between sticky top-16 sm:top-20 z-20 bg-farm-50/95 backdrop-blur-md py-2 sm:py-3">
+                <div class="flex items-center gap-2 overflow-x-auto w-full md:w-auto pb-1 md:pb-0 no-scrollbar" id="category-bar"></div>
 
                 <div class="relative w-full md:w-72">
-                    <i class="fa-solid fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-farm-500 text-sm"></i>
-                    <input type="text" id="menu-search-input" oninput="filterMenuItems()" placeholder="Search eggs, menus..." class="w-full pl-10 pr-4 py-2 bg-white border border-farm-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-farm-700 focus:border-farm-700 transition-all shadow-sm">
+                    <i class="fa-solid fa-search absolute left-3.5 top-1/2 -translate-y-1/2 text-farm-500 text-xs sm:text-sm"></i>
+                    <input type="text" id="menu-search-input" oninput="filterMenuItems()" placeholder="Search eggs, menus..." class="w-full pl-9 pr-4 py-2 bg-white border border-farm-200 rounded-xl text-xs sm:text-sm focus:outline-none focus:ring-2 focus:ring-farm-700 shadow-sm">
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 items-start">
                 <div class="lg:col-span-2 space-y-4">
-                    <div id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-5"></div>
-                    <div id="empty-menu-msg" class="hidden text-center py-16 bg-white rounded-2xl border border-farm-200 p-8">
-                        <i class="fa-solid fa-egg text-4xl text-farm-300 mb-3"></i>
-                        <h3 class="text-lg font-bold text-farm-900">No farm products found</h3>
-                        <p class="text-farm-600 text-sm mt-1">Try adjusting your search or category filter.</p>
+                    <div id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-5"></div>
+                    
+                    <div id="empty-menu-msg" class="hidden text-center py-12 bg-white rounded-2xl border border-farm-200 p-6">
+                        <i class="fa-solid fa-egg text-3xl text-farm-300 mb-2"></i>
+                        <h3 class="text-base font-bold text-farm-900">No farm products found</h3>
+                        <p class="text-farm-600 text-xs mt-0.5">Try adjusting your search query or category filter.</p>
                     </div>
                 </div>
 
+                <!-- Desktop Sidebar Cart Basket -->
                 <div class="hidden lg:block sticky top-36 bg-white rounded-2xl border border-farm-200 p-5 shadow-sm space-y-4">
                     <div class="flex items-center justify-between pb-3 border-b border-farm-200">
                         <h3 class="font-bold font-serif text-lg text-farm-900 flex items-center gap-2">
@@ -158,7 +166,7 @@
                         </div>
 
                         <button id="checkout-btn" onclick="openCheckoutModal()" disabled class="w-full mt-4 py-3 bg-farm-700 hover:bg-farm-800 disabled:bg-farm-100 disabled:text-farm-300 disabled:cursor-not-allowed text-white font-bold rounded-xl shadow-md transition-all flex items-center justify-center gap-2">
-                            <span>Proceed to Place Order</span>
+                            <span>Proceed to Checkout</span>
                             <i class="fa-solid fa-arrow-right text-xs"></i>
                         </button>
                     </div>
@@ -167,91 +175,91 @@
         </section>
 
         <!-- ================= ADMIN DASHBOARD VIEW ================= -->
-        <section id="admin-view" class="hidden space-y-6">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-farm-200 shadow-sm">
+        <section id="admin-view" class="hidden space-y-4 sm:space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-4 sm:p-6 rounded-2xl border border-farm-200 shadow-sm">
                 <div>
-                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-md text-xs font-bold bg-emerald-100 text-emerald-800 mb-1 border border-emerald-200">
+                    <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] sm:text-xs font-bold bg-emerald-100 text-emerald-800 mb-1 border border-emerald-200">
                         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span> Live Cloud Sync Active
                     </span>
-                    <h2 class="text-2xl font-bold font-serif text-farm-900">Farm Management Dashboard</h2>
-                    <p class="text-farm-600 text-xs sm:text-sm mt-0.5">Changes made here sync live to every device browsing your menu.</p>
+                    <h2 class="text-xl sm:text-2xl font-bold font-serif text-farm-900">Farm Management Dashboard</h2>
+                    <p class="text-farm-600 text-xs mt-0.5">Manage products, confirm orders, and update QR codes live across all devices.</p>
                 </div>
                 
                 <div class="flex flex-wrap items-center gap-2">
-                    <button onclick="openMenuEditorModal()" class="px-3.5 py-2.5 bg-farm-900 hover:bg-farm-800 text-white font-bold rounded-xl text-xs sm:text-sm transition-all flex items-center gap-2 shadow-sm">
-                        <i class="fa-solid fa-plus text-xs"></i> Add Product
+                    <button onclick="openMenuEditorModal()" class="flex-1 sm:flex-none px-3 py-2 bg-farm-900 hover:bg-farm-800 text-white font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-1.5 shadow-sm">
+                        <i class="fa-solid fa-plus text-[10px]"></i> Add Product
                     </button>
-                    <button onclick="openQrSettingsModal()" class="px-3.5 py-2.5 bg-farm-100 text-farm-800 hover:bg-farm-200 border border-farm-300 font-bold rounded-xl text-xs sm:text-sm transition-all flex items-center gap-2">
-                        <i class="fa-solid fa-qrcode text-xs"></i> Payment QR
+                    <button onclick="openQrSettingsModal()" class="flex-1 sm:flex-none px-3 py-2 bg-farm-100 text-farm-800 hover:bg-farm-200 border border-farm-300 font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-qrcode text-[10px]"></i> Payment QR
                     </button>
-                    <button onclick="clearAllSalesHistory()" class="px-3.5 py-2.5 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 font-bold rounded-xl text-xs sm:text-sm transition-all flex items-center gap-2">
-                        <i class="fa-solid fa-trash-can text-xs"></i> Clear Sales
+                    <button onclick="clearAllSalesHistory()" class="px-3 py-2 bg-red-50 hover:bg-red-100 text-red-700 border border-red-200 font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-trash-can text-[10px]"></i> Clear
                     </button>
                 </div>
             </div>
 
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div class="bg-white p-4 rounded-xl border border-farm-200 shadow-sm">
-                    <div class="text-xs font-bold text-farm-600 uppercase tracking-wider">Total Orders</div>
-                    <div id="stat-total-orders" class="text-2xl font-black text-farm-900 mt-1">0</div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+                <div class="bg-white p-3.5 rounded-xl border border-farm-200 shadow-sm">
+                    <div class="text-[10px] sm:text-xs font-bold text-farm-600 uppercase tracking-wider">Total Orders</div>
+                    <div id="stat-total-orders" class="text-xl sm:text-2xl font-black text-farm-900 mt-0.5">0</div>
                 </div>
-                <div class="bg-white p-4 rounded-xl border border-farm-200 shadow-sm">
-                    <div class="text-xs font-bold text-amber-600 uppercase tracking-wider">Pending / Confirmed</div>
-                    <div id="stat-pending-orders" class="text-2xl font-black text-amber-600 mt-1">0</div>
+                <div class="bg-white p-3.5 rounded-xl border border-farm-200 shadow-sm">
+                    <div class="text-[10px] sm:text-xs font-bold text-amber-600 uppercase tracking-wider">Pending / Confirmed</div>
+                    <div id="stat-pending-orders" class="text-xl sm:text-2xl font-black text-amber-600 mt-0.5">0</div>
                 </div>
-                <div class="bg-white p-4 rounded-xl border border-farm-200 shadow-sm">
-                    <div class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Completed Orders</div>
-                    <div id="stat-completed-orders" class="text-2xl font-black text-emerald-600 mt-1">0</div>
+                <div class="bg-white p-3.5 rounded-xl border border-farm-200 shadow-sm">
+                    <div class="text-[10px] sm:text-xs font-bold text-emerald-600 uppercase tracking-wider">Completed</div>
+                    <div id="stat-completed-orders" class="text-xl sm:text-2xl font-black text-emerald-600 mt-0.5">0</div>
                 </div>
-                <div class="bg-white p-4 rounded-xl border border-farm-200 shadow-sm">
-                    <div class="text-xs font-bold text-farm-700 uppercase tracking-wider">Total Revenue</div>
-                    <div id="stat-total-revenue" class="text-2xl font-black text-farm-700 mt-1">₱0.00</div>
+                <div class="bg-white p-3.5 rounded-xl border border-farm-200 shadow-sm">
+                    <div class="text-[10px] sm:text-xs font-bold text-farm-700 uppercase tracking-wider">Total Revenue</div>
+                    <div id="stat-total-revenue" class="text-xl sm:text-2xl font-black text-farm-700 mt-0.5">₱0.00</div>
                 </div>
             </div>
 
             <div class="border-b border-farm-200">
-                <nav class="flex gap-6">
-                    <button id="tab-btn-orders" onclick="switchAdminTab('orders')" class="pb-3 text-sm font-bold border-b-2 border-farm-700 text-farm-700 transition-all flex items-center gap-2">
+                <nav class="flex gap-4 sm:gap-6">
+                    <button id="tab-btn-orders" onclick="switchAdminTab('orders')" class="pb-2.5 text-xs sm:text-sm font-bold border-b-2 border-farm-700 text-farm-700 transition-all flex items-center gap-1.5">
                         <i class="fa-solid fa-list-check"></i> Customer Requests
                     </button>
-                    <button id="tab-btn-inventory" onclick="switchAdminTab('inventory')" class="pb-3 text-sm font-bold border-b-2 border-transparent text-farm-500 hover:text-farm-800 transition-all flex items-center gap-2">
-                        <i class="fa-solid fa-boxes-stacked"></i> Products & Availability
+                    <button id="tab-btn-inventory" onclick="switchAdminTab('inventory')" class="pb-2.5 text-xs sm:text-sm font-bold border-b-2 border-transparent text-farm-500 hover:text-farm-800 transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-boxes-stacked"></i> Inventory Switch
                     </button>
                 </nav>
             </div>
 
-            <div id="admin-tab-orders" class="space-y-4">
-                <div class="flex items-center gap-2 overflow-x-auto pb-1">
-                    <span class="text-xs font-bold text-farm-500 uppercase tracking-wider mr-2">Filter Status:</span>
-                    <button onclick="filterAdminOrders('ALL')" class="admin-filter-btn px-3 py-1 bg-farm-900 text-white rounded-lg text-xs font-bold">All</button>
-                    <button onclick="filterAdminOrders('Pending')" class="admin-filter-btn px-3 py-1 bg-farm-100 text-farm-800 hover:bg-farm-200 rounded-lg text-xs font-bold border border-farm-200">Pending</button>
-                    <button onclick="filterAdminOrders('Confirmed')" class="admin-filter-btn px-3 py-1 bg-farm-100 text-farm-800 hover:bg-farm-200 rounded-lg text-xs font-bold border border-farm-200">Confirmed</button>
-                    <button onclick="filterAdminOrders('Completed')" class="admin-filter-btn px-3 py-1 bg-farm-100 text-farm-800 hover:bg-farm-200 rounded-lg text-xs font-bold border border-farm-200">Completed</button>
-                    <button onclick="filterAdminOrders('Cancelled')" class="admin-filter-btn px-3 py-1 bg-farm-100 text-farm-800 hover:bg-farm-200 rounded-lg text-xs font-bold border border-farm-200">Cancelled</button>
+            <div id="admin-tab-orders" class="space-y-3.5">
+                <div class="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+                    <span class="text-[10px] font-bold text-farm-500 uppercase tracking-wider mr-1 shrink-0">Filter:</span>
+                    <button onclick="filterAdminOrders('ALL')" class="admin-filter-btn px-2.5 py-1 bg-farm-900 text-white rounded-lg text-xs font-bold shrink-0">All</button>
+                    <button onclick="filterAdminOrders('Pending')" class="admin-filter-btn px-2.5 py-1 bg-farm-100 text-farm-800 hover:bg-farm-200 rounded-lg text-xs font-bold border border-farm-200 shrink-0">Pending</button>
+                    <button onclick="filterAdminOrders('Confirmed')" class="admin-filter-btn px-2.5 py-1 bg-farm-100 text-farm-800 hover:bg-farm-200 rounded-lg text-xs font-bold border border-farm-200 shrink-0">Confirmed</button>
+                    <button onclick="filterAdminOrders('Completed')" class="admin-filter-btn px-2.5 py-1 bg-farm-100 text-farm-800 hover:bg-farm-200 rounded-lg text-xs font-bold border border-farm-200 shrink-0">Completed</button>
+                    <button onclick="filterAdminOrders('Cancelled')" class="admin-filter-btn px-2.5 py-1 bg-farm-100 text-farm-800 hover:bg-farm-200 rounded-lg text-xs font-bold border border-farm-200 shrink-0">Cancelled</button>
                 </div>
 
-                <div id="admin-orders-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"></div>
+                <div id="admin-orders-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5"></div>
 
                 <div id="no-orders-msg" class="hidden text-center py-12 bg-white rounded-2xl border border-farm-200 text-farm-600">
                     <i class="fa-solid fa-inbox text-3xl mb-2 text-farm-300"></i>
-                    <p class="font-bold">No order requests in this status category.</p>
+                    <p class="font-bold text-xs">No orders found in this category.</p>
                 </div>
             </div>
 
             <div id="admin-tab-inventory" class="hidden space-y-4">
                 <div class="bg-white rounded-2xl border border-farm-200 overflow-hidden shadow-sm">
                     <div class="overflow-x-auto">
-                        <table class="w-full text-left border-collapse">
+                        <table class="w-full text-left border-collapse min-w-[500px]">
                             <thead>
-                                <tr class="bg-farm-100/60 border-b border-farm-200 text-xs font-bold text-farm-700 uppercase tracking-wider">
-                                    <th class="p-4">Product</th>
-                                    <th class="p-4">Category</th>
-                                    <th class="p-4">Price</th>
-                                    <th class="p-4">Availability Switch</th>
-                                    <th class="p-4 text-right">Actions</th>
+                                <tr class="bg-farm-100/60 border-b border-farm-200 text-[11px] font-bold text-farm-700 uppercase tracking-wider">
+                                    <th class="p-3">Product</th>
+                                    <th class="p-3">Category</th>
+                                    <th class="p-3">Price</th>
+                                    <th class="p-3">Availability</th>
+                                    <th class="p-3 text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody id="admin-inventory-table-body" class="divide-y divide-farm-200 text-sm"></tbody>
+                            <tbody id="admin-inventory-table-body" class="divide-y divide-farm-200 text-xs"></tbody>
                         </table>
                     </div>
                 </div>
@@ -259,28 +267,49 @@
         </section>
     </main>
 
+    <!-- MOBILE FLOATING ACTION BAR FOR BASKET (VISIBLE ONLY ON MOBILE) -->
+    <div id="mobile-floating-cart" class="fixed bottom-0 inset-x-0 bg-white/95 backdrop-blur-md border-t border-farm-200 p-3 z-40 lg:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.08)]">
+        <div class="max-w-md mx-auto flex items-center justify-between gap-3">
+            <div class="flex items-center gap-2.5" onclick="toggleCartDrawer(true)">
+                <div class="relative bg-farm-100 text-farm-800 p-2.5 rounded-xl border border-farm-200">
+                    <i class="fa-solid fa-basket-shopping text-base text-farm-700"></i>
+                    <span id="mobile-float-badge" class="absolute -top-1.5 -right-1.5 bg-amber-600 text-white text-[10px] font-extrabold w-5 h-5 rounded-full flex items-center justify-center border-2 border-white">0</span>
+                </div>
+                <div>
+                    <div class="text-[10px] text-stone-500 font-bold uppercase tracking-wider">Total Amount</div>
+                    <div id="mobile-float-total" class="text-base font-black text-amber-600">₱0.00</div>
+                </div>
+            </div>
+
+            <button id="mobile-float-checkout-btn" onclick="openCheckoutModal()" disabled class="px-5 py-3 bg-farm-700 hover:bg-farm-800 disabled:bg-stone-200 disabled:text-stone-400 text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center gap-1.5 active:scale-95">
+                <span>Checkout</span>
+                <i class="fa-solid fa-arrow-right text-[10px]"></i>
+            </button>
+        </div>
+    </div>
+
     <!-- MODAL 1: Mobile Cart Drawer -->
     <div id="cart-drawer" class="fixed inset-0 z-50 transform translate-x-full transition-transform duration-300 ease-in-out lg:hidden">
         <div class="absolute inset-0 bg-farm-900/60 backdrop-blur-sm" onclick="toggleCartDrawer(false)"></div>
-        <div class="relative w-full max-w-md bg-white h-full ml-auto shadow-2xl flex flex-col justify-between p-6">
+        <div class="relative w-full max-w-xs sm:max-w-md bg-white h-full ml-auto shadow-2xl flex flex-col justify-between p-5">
             <div>
-                <div class="flex items-center justify-between pb-4 border-b border-farm-200">
-                    <h3 class="font-bold font-serif text-xl text-farm-900 flex items-center gap-2">
-                        <i class="fa-solid fa-basket-shopping text-farm-700"></i> Your Shopping Basket
+                <div class="flex items-center justify-between pb-3.5 border-b border-farm-200">
+                    <h3 class="font-bold font-serif text-lg text-farm-900 flex items-center gap-2">
+                        <i class="fa-solid fa-basket-shopping text-farm-700"></i> Your Basket
                     </h3>
-                    <button onclick="toggleCartDrawer(false)" class="p-2 text-farm-500 hover:text-farm-800">
-                        <i class="fa-solid fa-xmark text-xl"></i>
+                    <button onclick="toggleCartDrawer(false)" class="p-1.5 text-farm-500 hover:text-farm-800 rounded-lg">
+                        <i class="fa-solid fa-xmark text-lg"></i>
                     </button>
                 </div>
-                <div id="drawer-cart-items" class="mt-4 space-y-3 max-h-[calc(100vh-280px)] overflow-y-auto"></div>
+                <div id="drawer-cart-items" class="mt-3 space-y-2.5 max-h-[calc(100vh-230px)] overflow-y-auto pr-1"></div>
             </div>
 
-            <div class="border-t border-farm-200 pt-4 space-y-3">
-                <div class="flex justify-between text-base font-extrabold text-farm-900">
+            <div class="border-t border-farm-200 pt-3.5 space-y-3">
+                <div class="flex justify-between text-sm font-extrabold text-farm-900">
                     <span>Total Amount</span>
-                    <span id="drawer-cart-total" class="text-amber-600">₱0.00</span>
+                    <span id="drawer-cart-total" class="text-amber-600 text-base">₱0.00</span>
                 </div>
-                <button id="drawer-checkout-btn" onclick="toggleCartDrawer(false); openCheckoutModal();" disabled class="w-full py-3.5 bg-farm-700 text-white font-bold rounded-xl shadow-md disabled:bg-farm-200 transition-all">
+                <button id="drawer-checkout-btn" onclick="toggleCartDrawer(false); openCheckoutModal();" disabled class="w-full py-3 bg-farm-700 text-white font-bold text-xs rounded-xl shadow-md disabled:bg-farm-200 transition-all">
                     Proceed to Checkout
                 </button>
             </div>
@@ -289,97 +318,97 @@
 
     <!-- MODAL 2: Admin Login Pin Modal -->
     <div id="admin-auth-modal" class="fixed inset-0 z-50 hidden bg-farm-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-5 border border-farm-200">
+        <div class="bg-white rounded-3xl max-w-xs sm:max-w-sm w-full p-5 sm:p-6 shadow-2xl space-y-4 border border-farm-200">
             <div class="text-center">
-                <div class="w-12 h-12 bg-farm-100 text-farm-700 border border-farm-200 rounded-2xl flex items-center justify-center mx-auto mb-3">
-                    <i class="fa-solid fa-lock text-xl"></i>
+                <div class="w-11 h-11 bg-farm-100 text-farm-700 border border-farm-200 rounded-2xl flex items-center justify-center mx-auto mb-2.5">
+                    <i class="fa-solid fa-lock text-lg"></i>
                 </div>
-                <h3 class="text-xl font-bold font-serif text-farm-900">Owner Access Login</h3>
-                <p class="text-xs text-farm-600 mt-1">Enter your security PIN code to open control panel.</p>
+                <h3 class="text-lg font-bold font-serif text-farm-900">Owner Access Login</h3>
+                <p class="text-xs text-farm-600 mt-0.5">Enter security PIN code to open owner dashboard.</p>
             </div>
 
             <div>
-                <input type="password" id="admin-pin-input" placeholder="Enter PIN code" class="w-full px-4 py-3 bg-farm-50 border border-farm-200 rounded-xl text-center text-xl font-black tracking-widest focus:ring-2 focus:ring-farm-700 focus:outline-none">
+                <input type="password" id="admin-pin-input" placeholder="Enter PIN code" class="w-full px-4 py-3 bg-farm-50 border border-farm-200 rounded-xl text-center text-lg font-black tracking-widest focus:ring-2 focus:ring-farm-700 focus:outline-none">
                 <p id="pin-error-msg" class="text-xs text-red-600 font-bold text-center mt-2 hidden">Invalid Security PIN. Try again.</p>
             </div>
 
             <div class="flex gap-2">
                 <button onclick="toggleModal('admin-auth-modal', false)" class="w-1/2 py-2.5 text-xs font-bold text-farm-700 bg-farm-100 hover:bg-farm-200 rounded-xl">Cancel</button>
-                <button onclick="verifyAdminPin()" class="w-1/2 py-2.5 text-xs font-bold text-white bg-farm-700 hover:bg-farm-800 rounded-xl shadow-md">Login Now</button>
+                <button onclick="verifyAdminPin()" class="w-1/2 py-2.5 text-xs font-bold text-white bg-farm-700 hover:bg-farm-800 rounded-xl shadow-md">Login</button>
             </div>
         </div>
     </div>
 
     <!-- MODAL 3: Checkout Modal -->
-    <div id="checkout-modal" class="fixed inset-0 z-50 hidden bg-farm-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-6 sm:p-8 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto my-auto border border-farm-200">
-            <div class="flex items-center justify-between border-b border-farm-200 pb-4">
-                <h3 class="text-xl font-bold font-serif text-farm-900">Complete Your Order</h3>
-                <button onclick="toggleModal('checkout-modal', false)" class="text-farm-400 hover:text-farm-700">
+    <div id="checkout-modal" class="fixed inset-0 z-50 hidden bg-farm-900/60 backdrop-blur-sm flex items-center justify-center p-3.5 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-7 shadow-2xl space-y-4 max-h-[88vh] overflow-y-auto my-auto border border-farm-200">
+            <div class="flex items-center justify-between border-b border-farm-200 pb-3">
+                <h3 class="text-lg sm:text-xl font-bold font-serif text-farm-900">Complete Your Order</h3>
+                <button onclick="toggleModal('checkout-modal', false)" class="text-farm-400 hover:text-farm-700 p-1">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
 
-            <form id="checkout-form" onsubmit="handleOrderSubmission(event)" class="space-y-4">
+            <form id="checkout-form" onsubmit="handleOrderSubmission(event)" class="space-y-3.5">
                 <div>
-                    <label class="block text-xs font-bold text-farm-800 uppercase tracking-wider mb-1">Full Name *</label>
-                    <input type="text" id="cust-name" required placeholder="e.g. Maria Santos" class="w-full px-4 py-2.5 bg-farm-50 border border-farm-200 rounded-xl text-sm focus:ring-2 focus:ring-farm-700 focus:outline-none">
+                    <label class="block text-[11px] font-bold text-farm-800 uppercase tracking-wider mb-1">Full Name *</label>
+                    <input type="text" id="cust-name" required placeholder="e.g. Maria Santos" class="w-full px-3.5 py-2.5 bg-farm-50 border border-farm-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-farm-700 focus:outline-none">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-farm-800 uppercase tracking-wider mb-1">Contact Phone Number *</label>
-                    <input type="tel" id="cust-phone" required placeholder="e.g. 0917 123 4567" class="w-full px-4 py-2.5 bg-farm-50 border border-farm-200 rounded-xl text-sm focus:ring-2 focus:ring-farm-700 focus:outline-none">
+                    <label class="block text-[11px] font-bold text-farm-800 uppercase tracking-wider mb-1">Contact Phone Number *</label>
+                    <input type="tel" id="cust-phone" required placeholder="e.g. 0917 123 4567" class="w-full px-3.5 py-2.5 bg-farm-50 border border-farm-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-farm-700 focus:outline-none">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-farm-800 uppercase tracking-wider mb-1">Fulfillment Option *</label>
-                    <div class="grid grid-cols-2 gap-3">
-                        <label class="border border-farm-200 rounded-xl p-3 text-center cursor-pointer hover:bg-farm-100 has-[:checked]:bg-farm-100 has-[:checked]:border-farm-700 transition-all">
+                    <label class="block text-[11px] font-bold text-farm-800 uppercase tracking-wider mb-1">Fulfillment Option *</label>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <label class="border border-farm-200 rounded-xl p-2.5 text-center cursor-pointer hover:bg-farm-100 has-[:checked]:bg-farm-100 has-[:checked]:border-farm-700 transition-all">
                             <input type="radio" name="orderType" value="Farm Pickup" checked class="sr-only">
-                            <i class="fa-solid fa-house-chimney block text-farm-700 mb-1"></i>
+                            <i class="fa-solid fa-house-chimney block text-farm-700 mb-0.5 text-sm"></i>
                             <span class="text-xs font-bold text-farm-900">Pick up</span>
                         </label>
-                        <label class="border border-farm-200 rounded-xl p-3 text-center cursor-pointer hover:bg-farm-100 has-[:checked]:bg-farm-100 has-[:checked]:border-farm-700 transition-all">
+                        <label class="border border-farm-200 rounded-xl p-2.5 text-center cursor-pointer hover:bg-farm-100 has-[:checked]:bg-farm-100 has-[:checked]:border-farm-700 transition-all">
                             <input type="radio" name="orderType" value="Local Delivery" class="sr-only">
-                            <i class="fa-solid fa-truck-ramp-box block text-farm-700 mb-1"></i>
+                            <i class="fa-solid fa-truck-ramp-box block text-farm-700 mb-0.5 text-sm"></i>
                             <span class="text-xs font-bold text-farm-900">Delivery</span>
                         </label>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-farm-800 uppercase tracking-wider mb-1">Delivery Address / Pickup Details *</label>
-                    <input type="text" id="cust-address" required placeholder="e.g. Brgy. XI, Victorias City" class="w-full px-4 py-2.5 bg-farm-50 border border-farm-200 rounded-xl text-sm focus:ring-2 focus:ring-farm-700 focus:outline-none">
+                    <label class="block text-[11px] font-bold text-farm-800 uppercase tracking-wider mb-1">Delivery Address / Pickup Details *</label>
+                    <input type="text" id="cust-address" required placeholder="e.g. Brgy. XI, Victorias City" class="w-full px-3.5 py-2.5 bg-farm-50 border border-farm-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-farm-700 focus:outline-none">
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-farm-800 uppercase tracking-wider mb-1">Payment Option *</label>
-                    <div class="grid grid-cols-2 gap-3">
-                        <label class="flex items-center gap-3 p-3 border border-farm-200 rounded-xl cursor-pointer hover:bg-farm-50 has-[:checked]:border-farm-700 has-[:checked]:bg-farm-100">
+                    <label class="block text-[11px] font-bold text-farm-800 uppercase tracking-wider mb-1">Payment Option *</label>
+                    <div class="grid grid-cols-2 gap-2.5">
+                        <label class="flex items-center gap-2 p-2.5 border border-farm-200 rounded-xl cursor-pointer hover:bg-farm-50 has-[:checked]:border-farm-700 has-[:checked]:bg-farm-100">
                             <input type="radio" name="paymentMethod" value="Cash on Delivery/Pickup" checked class="accent-farm-700">
                             <div>
                                 <div class="text-xs font-bold text-farm-900">Cash Payment</div>
-                                <div class="text-[10px] text-farm-600">Pay cash upon pickup/delivery</div>
+                                <div class="text-[9px] text-farm-600">Pay upon pickup/delivery</div>
                             </div>
                         </label>
-                        <label class="flex items-center gap-3 p-3 border border-farm-200 rounded-xl cursor-pointer hover:bg-farm-50 has-[:checked]:border-farm-700 has-[:checked]:bg-farm-100">
+                        <label class="flex items-center gap-2 p-2.5 border border-farm-200 rounded-xl cursor-pointer hover:bg-farm-50 has-[:checked]:border-farm-700 has-[:checked]:bg-farm-100">
                             <input type="radio" name="paymentMethod" value="QR Code Payment" class="accent-farm-700">
                             <div>
                                 <div class="text-xs font-bold text-farm-900">Online Payment QR</div>
-                                <div class="text-[10px] text-farm-600">GCash / Maya QR scan</div>
+                                <div class="text-[9px] text-farm-600">GCash / Maya QR scan</div>
                             </div>
                         </label>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-farm-800 uppercase tracking-wider mb-1">Special Order Instructions</label>
-                    <textarea id="cust-notes" rows="2" placeholder="e.g. Preferred pickup time, packaging notes..." class="w-full px-4 py-2 bg-farm-50 border border-farm-200 rounded-xl text-sm focus:ring-2 focus:ring-farm-700 focus:outline-none"></textarea>
+                    <label class="block text-[11px] font-bold text-farm-800 uppercase tracking-wider mb-1">Special Instructions</label>
+                    <textarea id="cust-notes" rows="2" placeholder="e.g. Preferred pickup time, packaging notes..." class="w-full px-3.5 py-2 bg-farm-50 border border-farm-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-farm-700 focus:outline-none"></textarea>
                 </div>
 
-                <div class="pt-2">
-                    <button type="submit" class="w-full py-3.5 bg-farm-700 hover:bg-farm-800 text-white font-bold rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
-                        <span>Continue Order</span>
+                <div class="pt-1">
+                    <button type="submit" class="w-full py-3 bg-farm-700 hover:bg-farm-800 text-white font-bold text-xs sm:text-sm rounded-xl shadow-lg transition-all flex items-center justify-center gap-2">
+                        <span>Submit Order</span>
                         <i class="fa-solid fa-arrow-right text-xs"></i>
                     </button>
                 </div>
@@ -388,77 +417,76 @@
     </div>
 
     <!-- MODAL 4: Enlarged QR Code Payment Display & Proof Upload Modal -->
-    <div id="qr-payment-modal" class="fixed inset-0 z-50 hidden bg-farm-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white rounded-3xl max-w-md sm:max-w-lg w-full p-6 sm:p-8 shadow-2xl text-center space-y-5 border border-farm-200 max-h-[90vh] overflow-y-auto my-auto">
-            <div class="w-12 h-12 bg-farm-100 text-farm-700 border border-farm-200 rounded-full flex items-center justify-center mx-auto">
-                <i class="fa-solid fa-qrcode text-xl"></i>
+    <div id="qr-payment-modal" class="fixed inset-0 z-50 hidden bg-farm-900/60 backdrop-blur-sm flex items-center justify-center p-3.5 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-sm sm:max-w-md w-full p-5 sm:p-7 shadow-2xl text-center space-y-4 border border-farm-200 max-h-[88vh] overflow-y-auto my-auto">
+            <div class="w-10 h-10 bg-farm-100 text-farm-700 border border-farm-200 rounded-full flex items-center justify-center mx-auto">
+                <i class="fa-solid fa-qrcode text-lg"></i>
             </div>
             <div>
-                <h3 class="text-xl font-bold font-serif text-farm-900">Scan QR Code & Upload Receipt</h3>
-                <p class="text-xs text-farm-600 mt-1">Scan using GCash, Maya, or Bank App, then upload proof of payment.</p>
+                <h3 class="text-lg font-bold font-serif text-farm-900">Scan QR Code & Upload Receipt</h3>
+                <p class="text-[11px] text-farm-600 mt-0.5">Scan using GCash or Maya, then upload proof of payment screenshot.</p>
             </div>
 
-            <div class="p-4 bg-white rounded-2xl border-2 border-farm-200 inline-block shadow-sm">
-                <img id="qr-modal-img" src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=HechanovaFarmPayment" alt="Hechanova Farm Payment QR Code" class="w-64 h-64 sm:w-72 sm:h-72 object-contain rounded-xl mx-auto">
+            <div class="p-3 bg-white rounded-2xl border-2 border-farm-200 inline-block shadow-sm">
+                <img id="qr-modal-img" src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=HechanovaFarmPayment" alt="Hechanova Farm Payment QR Code" class="w-52 h-52 sm:w-64 sm:h-64 object-contain rounded-xl mx-auto">
             </div>
 
-            <div class="bg-farm-100/70 p-3.5 rounded-xl text-left border border-farm-200 space-y-1">
-                <p class="text-xs text-farm-900 font-bold">1. Send exact total amount: <strong id="qr-total-amount" class="text-amber-600 text-sm">₱0.00</strong></p>
-                <p class="text-[11px] text-farm-700">2. Take a screenshot of your payment confirmation.</p>
-                <p class="text-[11px] text-farm-700">3. Upload the screenshot below so the farm owner can verify your order.</p>
+            <div class="bg-farm-100/70 p-3 rounded-xl text-left border border-farm-200 space-y-1">
+                <p class="text-xs text-farm-900 font-bold">1. Send exact total: <strong id="qr-total-amount" class="text-amber-600 text-xs sm:text-sm">₱0.00</strong></p>
+                <p class="text-[10px] text-farm-700">2. Screenshot your payment confirmation.</p>
+                <p class="text-[10px] text-farm-700">3. Upload screenshot below to finalize order.</p>
             </div>
 
-            <div class="text-left space-y-1.5">
-                <label class="block text-xs font-bold text-farm-800 uppercase tracking-wider">Upload Payment Screenshot *</label>
-                <input type="file" id="cust-payment-proof-file" accept="image/*" onchange="previewPaymentProof(event)" class="w-full text-xs text-farm-700 file:mr-3 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-farm-100 file:text-farm-800 hover:file:bg-farm-200 cursor-pointer border border-farm-200 p-1 rounded-xl bg-farm-50">
+            <div class="text-left space-y-1">
+                <label class="block text-[11px] font-bold text-farm-800 uppercase tracking-wider">Upload Payment Screenshot *</label>
+                <input type="file" id="cust-payment-proof-file" accept="image/*" onchange="previewPaymentProof(event)" class="w-full text-xs text-farm-700 file:mr-2 file:py-2 file:px-3 file:rounded-xl file:border-0 file:text-[11px] file:font-bold file:bg-farm-100 file:text-farm-800 hover:file:bg-farm-200 cursor-pointer border border-farm-200 p-1 rounded-xl bg-farm-50">
                 
                 <div id="proof-preview-container" class="hidden mt-2 p-2 border border-farm-200 rounded-xl bg-farm-50 flex items-center justify-between">
-                    <img id="proof-preview-img" src="" class="w-14 h-14 object-cover rounded-lg border border-farm-200">
+                    <img id="proof-preview-img" src="" class="w-12 h-12 object-cover rounded-lg border border-farm-200">
                     <span class="text-xs text-emerald-700 font-bold flex items-center gap-1">
                         <i class="fa-solid fa-circle-check"></i> Screenshot Attached
                     </span>
                 </div>
             </div>
 
-            <div class="flex gap-2 pt-2">
-                <button onclick="toggleModal('qr-payment-modal', false)" class="w-1/3 py-3 bg-farm-100 hover:bg-farm-200 text-farm-800 font-bold text-xs rounded-xl transition-all">Back</button>
-                <button onclick="finalizeQrOrder()" class="w-2/3 py-3 bg-farm-700 hover:bg-farm-800 text-white font-bold text-xs rounded-xl shadow-md transition-all">
-                    Submit & Complete Order
+            <div class="flex gap-2 pt-1">
+                <button onclick="toggleModal('qr-payment-modal', false)" class="w-1/3 py-2.5 bg-farm-100 hover:bg-farm-200 text-farm-800 font-bold text-xs rounded-xl transition-all">Back</button>
+                <button onclick="finalizeQrOrder()" class="w-2/3 py-2.5 bg-farm-700 hover:bg-farm-800 text-white font-bold text-xs rounded-xl shadow-md transition-all">
+                    Submit Order
                 </button>
             </div>
         </div>
     </div>
 
     <!-- MODAL 5: Printable Digital Receipt Modal -->
-    <div id="receipt-modal" class="fixed inset-0 z-50 hidden bg-farm-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 sm:p-8 shadow-2xl space-y-6 max-h-[90vh] overflow-y-auto my-auto border border-farm-200">
-            <div id="printable-receipt" class="space-y-4">
-                <div class="text-center border-b border-dashed border-farm-300 pb-4">
-                    <div class="w-16 h-16 mx-auto mb-2 rounded-full overflow-hidden border border-farm-700 p-0.5 bg-white">
+    <div id="receipt-modal" class="fixed inset-0 z-50 hidden bg-farm-900/60 backdrop-blur-sm flex items-center justify-center p-3.5 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-sm sm:max-w-md w-full p-5 sm:p-7 shadow-2xl space-y-4 max-h-[88vh] overflow-y-auto my-auto border border-farm-200">
+            <div id="printable-receipt" class="space-y-3.5">
+                <div class="text-center border-b border-dashed border-farm-300 pb-3">
+                    <div class="w-14 h-14 mx-auto mb-1.5 rounded-full overflow-hidden border border-farm-700 p-0.5 bg-white">
                         <img src="Images/Hechanova Farm.jpg" class="w-full h-full object-contain rounded-full" alt="Hechanova Logo" onerror="this.onerror=null; this.src='https://i.imgur.com/8KKWrZg.jpg';">
                     </div>
-                    <h2 class="text-xl font-black font-serif tracking-tight text-farm-900 uppercase">Hechanova Farm</h2>
-                    <p class="text-[11px] text-farm-700 font-semibold uppercase tracking-wider">Free Range Chicken & Eggs</p>
-                    <p class="text-[11px] text-stone-500 mt-0.5">Victorias City, Brgy. XI • Est. 2023</p>
-                    <p class="text-[11px] text-stone-500">Contact: 0950-262-2470</p>
-                    <div class="inline-block mt-3 px-3 py-1 bg-farm-100 border border-farm-200 rounded-full text-xs font-mono font-bold text-farm-900">
+                    <h2 class="text-lg font-black font-serif tracking-tight text-farm-900 uppercase">Hechanova Farm</h2>
+                    <p class="text-[10px] text-farm-700 font-semibold uppercase tracking-wider">Free Range Chicken & Eggs</p>
+                    <p class="text-[10px] text-stone-500 mt-0.5">Victorias City, Brgy. XI • Est. 2023</p>
+                    <div class="inline-block mt-2 px-2.5 py-0.5 bg-farm-100 border border-farm-200 rounded-full text-[11px] font-mono font-bold text-farm-900">
                         Order #<span id="receipt-id">0000</span>
                     </div>
                 </div>
 
-                <div class="text-xs space-y-1 text-farm-800 border-b border-farm-100 pb-3">
+                <div class="text-xs space-y-1 text-farm-800 border-b border-farm-100 pb-2.5">
                     <div class="flex justify-between"><span>Date:</span> <span id="receipt-date" class="font-bold">--</span></div>
-                    <div class="flex justify-between"><span>Customer Name:</span> <span id="receipt-cust-name" class="font-bold">--</span></div>
-                    <div class="flex justify-between"><span>Phone Number:</span> <span id="receipt-cust-phone" class="font-bold">--</span></div>
-                    <div class="flex justify-between"><span>Type/Address:</span> <span id="receipt-order-type" class="font-bold text-farm-900">--</span></div>
-                    <div class="flex justify-between"><span>Payment Option:</span> <span id="receipt-payment-method" class="font-bold text-amber-600">--</span></div>
+                    <div class="flex justify-between"><span>Customer:</span> <span id="receipt-cust-name" class="font-bold">--</span></div>
+                    <div class="flex justify-between"><span>Phone:</span> <span id="receipt-cust-phone" class="font-bold">--</span></div>
+                    <div class="flex justify-between"><span>Type:</span> <span id="receipt-order-type" class="font-bold text-farm-900">--</span></div>
+                    <div class="flex justify-between"><span>Payment:</span> <span id="receipt-payment-method" class="font-bold text-amber-600">--</span></div>
                 </div>
 
                 <div>
                     <table class="w-full text-xs text-left">
                         <thead>
                             <tr class="border-b border-farm-200 text-farm-500 uppercase">
-                                <th class="py-1">Product Item</th>
+                                <th class="py-1">Item</th>
                                 <th class="py-1 text-center">Qty</th>
                                 <th class="py-1 text-right">Price</th>
                             </tr>
@@ -467,28 +495,28 @@
                     </table>
                 </div>
 
-                <div class="border-t border-dashed border-farm-300 pt-3 space-y-1 text-xs">
-                    <div class="flex justify-between text-base font-extrabold text-farm-900 pt-1">
+                <div class="border-t border-dashed border-farm-300 pt-2.5 space-y-1 text-xs">
+                    <div class="flex justify-between text-base font-extrabold text-farm-900 pt-0.5">
                         <span>Total Paid</span>
                         <span id="receipt-total" class="text-amber-600">₱0.00</span>
                     </div>
                 </div>
 
-                <div id="receipt-proof-section" class="hidden border-t border-farm-100 pt-3 text-center space-y-1">
-                    <span class="text-[11px] font-bold text-farm-700 block uppercase">Uploaded Payment Proof:</span>
-                    <img id="receipt-proof-img" src="" class="w-24 h-24 object-cover rounded-xl border border-farm-200 mx-auto">
+                <div id="receipt-proof-section" class="hidden border-t border-farm-100 pt-2.5 text-center space-y-1">
+                    <span class="text-[10px] font-bold text-farm-700 block uppercase">Payment Proof Attached:</span>
+                    <img id="receipt-proof-img" src="" class="w-20 h-20 object-cover rounded-xl border border-farm-200 mx-auto">
                 </div>
 
-                <div class="text-center pt-2">
-                    <p class="text-[11px] text-farm-500 italic">Thank you for supporting farm-fresh local free range produce!</p>
+                <div class="text-center pt-1">
+                    <p class="text-[10px] text-farm-500 italic">Thank you for supporting farm-fresh local free range produce!</p>
                 </div>
             </div>
 
-            <div class="flex gap-2 no-print border-t border-farm-200 pt-4">
-                <button onclick="window.print()" class="w-1/2 py-2.5 bg-farm-100 hover:bg-farm-200 text-farm-800 font-bold rounded-xl text-xs sm:text-sm transition-all flex items-center justify-center gap-2 border border-farm-200">
-                    <i class="fa-solid fa-print"></i> Print Receipt
+            <div class="flex gap-2 no-print border-t border-farm-200 pt-3">
+                <button onclick="window.print()" class="w-1/2 py-2.5 bg-farm-100 hover:bg-farm-200 text-farm-800 font-bold rounded-xl text-xs transition-all flex items-center justify-center gap-1.5 border border-farm-200">
+                    <i class="fa-solid fa-print"></i> Print
                 </button>
-                <button onclick="toggleModal('receipt-modal', false)" class="w-1/2 py-2.5 bg-farm-700 hover:bg-farm-800 text-white font-bold rounded-xl text-xs sm:text-sm transition-all">
+                <button onclick="toggleModal('receipt-modal', false)" class="w-1/2 py-2.5 bg-farm-700 hover:bg-farm-800 text-white font-bold rounded-xl text-xs transition-all">
                     Done
                 </button>
             </div>
@@ -496,31 +524,31 @@
     </div>
 
     <!-- MODAL 6: Admin Menu Item CRUD Editor -->
-    <div id="menu-editor-modal" class="fixed inset-0 z-50 hidden bg-farm-900/60 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-white rounded-3xl max-w-lg w-full p-6 shadow-2xl space-y-5 border border-farm-200 max-h-[90vh] overflow-y-auto my-auto">
-            <div class="flex items-center justify-between border-b border-farm-200 pb-3">
-                <h3 id="menu-editor-title" class="text-xl font-bold font-serif text-farm-900">Add Farm Product</h3>
-                <button onclick="toggleModal('menu-editor-modal', false)" class="text-farm-400 hover:text-farm-700">
+    <div id="menu-editor-modal" class="fixed inset-0 z-50 hidden bg-farm-900/60 backdrop-blur-sm flex items-center justify-center p-3.5 overflow-y-auto">
+        <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-4 border border-farm-200 max-h-[88vh] overflow-y-auto my-auto">
+            <div class="flex items-center justify-between border-b border-farm-200 pb-2.5">
+                <h3 id="menu-editor-title" class="text-lg font-bold font-serif text-farm-900">Add Farm Product</h3>
+                <button onclick="toggleModal('menu-editor-modal', false)" class="text-farm-400 hover:text-farm-700 p-1">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
 
-            <form id="menu-item-form" onsubmit="saveMenuItem(event)" class="space-y-4">
+            <form id="menu-item-form" onsubmit="saveMenuItem(event)" class="space-y-3">
                 <input type="hidden" id="edit-item-id">
 
                 <div>
-                    <label class="block text-xs font-bold text-farm-800 uppercase tracking-wider mb-1">Product Title *</label>
-                    <input type="text" id="edit-item-title" required placeholder="e.g. Fresh Free Range Eggs (Tray)" class="w-full px-4 py-2.5 bg-farm-50 border border-farm-200 rounded-xl text-sm focus:ring-2 focus:ring-farm-700 focus:outline-none">
+                    <label class="block text-[11px] font-bold text-farm-800 uppercase tracking-wider mb-1">Product Title *</label>
+                    <input type="text" id="edit-item-title" required placeholder="e.g. Fresh Free Range Eggs (Tray)" class="w-full px-3.5 py-2 bg-farm-50 border border-farm-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-farm-700 focus:outline-none">
                 </div>
 
-                <div class="grid grid-cols-2 gap-3">
+                <div class="grid grid-cols-2 gap-2.5">
                     <div>
-                        <label class="block text-xs font-bold text-farm-800 uppercase tracking-wider mb-1">Price (₱) *</label>
-                        <input type="number" step="0.01" id="edit-item-price" required placeholder="280.00" class="w-full px-4 py-2.5 bg-farm-50 border border-farm-200 rounded-xl text-sm focus:ring-2 focus:ring-farm-700 focus:outline-none">
+                        <label class="block text-[11px] font-bold text-farm-800 uppercase tracking-wider mb-1">Price (₱) *</label>
+                        <input type="number" step="0.01" id="edit-item-price" required placeholder="280.00" class="w-full px-3.5 py-2 bg-farm-50 border border-farm-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-farm-700 focus:outline-none">
                     </div>
                     <div>
-                        <label class="block text-xs font-bold text-farm-800 uppercase tracking-wider mb-1">Category *</label>
-                        <select id="edit-item-category" required class="w-full px-4 py-2.5 bg-farm-50 border border-farm-200 rounded-xl text-sm focus:ring-2 focus:ring-farm-700 focus:outline-none">
+                        <label class="block text-[11px] font-bold text-farm-800 uppercase tracking-wider mb-1">Category *</label>
+                        <select id="edit-item-category" required class="w-full px-3.5 py-2 bg-farm-50 border border-farm-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-farm-700 focus:outline-none">
                             <option value="Eggs">Eggs</option>
                             <option value="Hand-Crafted Menus">Hand-Crafted Menus</option>
                             <option value="Pork">Pork</option>
@@ -529,29 +557,28 @@
                     </div>
                 </div>
 
-                <div class="space-y-2">
-                    <label class="block text-xs font-bold text-farm-800 uppercase tracking-wider">Product Photo Upload *</label>
+                <div class="space-y-1.5">
+                    <label class="block text-[11px] font-bold text-farm-800 uppercase tracking-wider">Product Photo Upload *</label>
                     
                     <div>
-                        <span class="text-[11px] text-farm-600 block mb-1">Upload Photo File:</span>
-                        <input type="file" id="edit-item-file" accept="image/*" onchange="handleMenuPhotoFileUpload(event)" class="w-full text-xs text-farm-700 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-farm-100 file:text-farm-800 hover:file:bg-farm-200 cursor-pointer border border-farm-200 p-1 rounded-xl bg-farm-50">
+                        <input type="file" id="edit-item-file" accept="image/*" onchange="handleMenuPhotoFileUpload(event)" class="w-full text-xs text-farm-700 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-[11px] file:font-bold file:bg-farm-100 file:text-farm-800 hover:file:bg-farm-200 cursor-pointer border border-farm-200 p-1 rounded-xl bg-farm-50">
                     </div>
 
-                    <div class="text-center text-[10px] font-bold text-farm-400">- OR PASTE WEB LINK -</div>
+                    <div class="text-center text-[9px] font-bold text-farm-400">- OR PASTE WEB LINK -</div>
 
                     <div>
-                        <input type="url" id="edit-item-image" placeholder="https://images.unsplash.com/..." oninput="previewMenuPhotoUrl()" class="w-full px-4 py-2 bg-farm-50 border border-farm-200 rounded-xl text-xs focus:ring-2 focus:ring-farm-700 focus:outline-none">
+                        <input type="url" id="edit-item-image" placeholder="https://images.unsplash.com/..." oninput="previewMenuPhotoUrl()" class="w-full px-3.5 py-1.5 bg-farm-50 border border-farm-200 rounded-xl text-xs focus:ring-2 focus:ring-farm-700 focus:outline-none">
                     </div>
 
-                    <div id="menu-photo-preview-box" class="mt-2 text-center bg-farm-50 p-2 rounded-xl border border-farm-200">
-                        <span class="text-[10px] font-bold text-farm-500 block mb-1">Photo Preview:</span>
-                        <img id="menu-photo-preview-img" src="https://placehold.co/600x400?text=Product+Photo" class="w-28 h-20 object-cover rounded-lg mx-auto border border-farm-200 bg-white">
+                    <div id="menu-photo-preview-box" class="mt-1 text-center bg-farm-50 p-2 rounded-xl border border-farm-200">
+                        <span class="text-[9px] font-bold text-farm-500 block mb-1">Photo Preview:</span>
+                        <img id="menu-photo-preview-img" src="https://placehold.co/600x400?text=Product+Photo" class="w-24 h-16 object-cover rounded-lg mx-auto border border-farm-200 bg-white">
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-bold text-farm-800 uppercase tracking-wider mb-1">Product Description</label>
-                    <textarea id="edit-item-desc" rows="2" placeholder="e.g. 30 pieces fresh organic eggs..." class="w-full px-4 py-2.5 bg-farm-50 border border-farm-200 rounded-xl text-sm focus:ring-2 focus:ring-farm-700 focus:outline-none"></textarea>
+                    <label class="block text-[11px] font-bold text-farm-800 uppercase tracking-wider mb-1">Product Description</label>
+                    <textarea id="edit-item-desc" rows="2" placeholder="e.g. 30 pieces fresh organic eggs..." class="w-full px-3.5 py-2 bg-farm-50 border border-farm-200 rounded-xl text-xs sm:text-sm focus:ring-2 focus:ring-farm-700 focus:outline-none"></textarea>
                 </div>
 
                 <div class="flex items-center gap-2">
@@ -559,7 +586,7 @@
                     <label for="edit-item-available" class="text-xs font-bold text-farm-800">Available / In Stock</label>
                 </div>
 
-                <div class="pt-3 flex gap-2">
+                <div class="pt-2 flex gap-2">
                     <button type="button" onclick="toggleModal('menu-editor-modal', false)" class="w-1/2 py-2.5 text-xs font-bold text-farm-700 bg-farm-100 hover:bg-farm-200 rounded-xl">Cancel</button>
                     <button type="submit" class="w-1/2 py-2.5 text-xs font-bold text-white bg-farm-700 hover:bg-farm-800 rounded-xl shadow-md">Save Product</button>
                 </div>
@@ -568,30 +595,30 @@
     </div>
 
     <!-- MODAL 7: QR Code Settings Modal for Admin -->
-    <div id="qr-settings-modal" class="fixed inset-0 z-50 hidden bg-farm-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4 border border-farm-200">
-            <div class="flex items-center justify-between border-b border-farm-200 pb-3">
-                <h3 class="text-lg font-bold font-serif text-farm-900">Configure Owner Payment QR</h3>
-                <button onclick="toggleModal('qr-settings-modal', false)" class="text-farm-400 hover:text-farm-700">
+    <div id="qr-settings-modal" class="fixed inset-0 z-50 hidden bg-farm-900/60 backdrop-blur-sm flex items-center justify-center p-3.5">
+        <div class="bg-white rounded-3xl max-w-xs sm:max-w-sm w-full p-5 shadow-2xl space-y-3.5 border border-farm-200">
+            <div class="flex items-center justify-between border-b border-farm-200 pb-2.5">
+                <h3 class="text-base font-bold font-serif text-farm-900">Configure Owner Payment QR</h3>
+                <button onclick="toggleModal('qr-settings-modal', false)" class="text-farm-400 hover:text-farm-700 p-1">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
 
             <div>
-                <label class="block text-xs font-bold text-farm-800 uppercase tracking-wider mb-1">Upload QR Code Image File</label>
-                <input type="file" id="admin-qr-file-input" accept="image/*" onchange="handleQrFileUpload(event)" class="w-full text-xs text-farm-700 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-farm-100 file:text-farm-800 hover:file:bg-farm-200 cursor-pointer border border-farm-200 p-1 rounded-xl bg-farm-50">
+                <label class="block text-[11px] font-bold text-farm-800 uppercase tracking-wider mb-1">Upload QR Image File</label>
+                <input type="file" id="admin-qr-file-input" accept="image/*" onchange="handleQrFileUpload(event)" class="w-full text-xs text-farm-700 file:mr-2 file:py-1.5 file:px-3 file:rounded-xl file:border-0 file:text-[11px] file:font-bold file:bg-farm-100 file:text-farm-800 hover:file:bg-farm-200 cursor-pointer border border-farm-200 p-1 rounded-xl bg-farm-50">
             </div>
 
-            <div class="text-center text-xs font-bold text-farm-400 my-1">- OR -</div>
+            <div class="text-center text-[10px] font-bold text-farm-400">- OR -</div>
 
             <div>
-                <label class="block text-xs font-bold text-farm-800 uppercase tracking-wider mb-1">Paste Direct QR Image URL</label>
-                <input type="url" id="admin-qr-url-input" placeholder="https://..." oninput="previewQrUrlInput()" class="w-full px-3.5 py-2 bg-farm-50 border border-farm-200 rounded-xl text-xs focus:ring-2 focus:ring-farm-700 focus:outline-none">
+                <label class="block text-[11px] font-bold text-farm-800 uppercase tracking-wider mb-1">Paste Direct QR Image URL</label>
+                <input type="url" id="admin-qr-url-input" placeholder="https://..." oninput="previewQrUrlInput()" class="w-full px-3 py-2 bg-farm-50 border border-farm-200 rounded-xl text-xs focus:ring-2 focus:ring-farm-700 focus:outline-none">
             </div>
 
-            <div class="text-center bg-farm-50 p-3 rounded-xl border border-farm-200">
-                <span class="text-[10px] font-bold text-farm-600 block mb-1">Active QR Preview:</span>
-                <img id="admin-qr-preview-img" src="" class="w-48 h-48 object-contain mx-auto rounded-lg border border-farm-200 bg-white">
+            <div class="text-center bg-farm-50 p-2 rounded-xl border border-farm-200">
+                <span class="text-[9px] font-bold text-farm-600 block mb-1">Active QR Preview:</span>
+                <img id="admin-qr-preview-img" src="" class="w-40 h-40 object-contain mx-auto rounded-lg border border-farm-200 bg-white">
             </div>
 
             <button onclick="saveQrSettings()" class="w-full py-2.5 bg-farm-700 hover:bg-farm-800 text-white font-bold rounded-xl text-xs shadow-md">
@@ -601,16 +628,16 @@
     </div>
 
     <!-- MODAL 8: View Proof Modal for Admin -->
-    <div id="view-proof-modal" class="fixed inset-0 z-50 hidden bg-farm-900/60 backdrop-blur-sm flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl max-w-md w-full p-6 shadow-2xl text-center space-y-4 border border-farm-200">
-            <div class="flex items-center justify-between border-b border-farm-200 pb-3">
-                <h3 class="text-lg font-bold font-serif text-farm-900">Customer Payment Proof</h3>
-                <button onclick="toggleModal('view-proof-modal', false)" class="text-farm-400 hover:text-farm-700">
+    <div id="view-proof-modal" class="fixed inset-0 z-50 hidden bg-farm-900/60 backdrop-blur-sm flex items-center justify-center p-3.5">
+        <div class="bg-white rounded-3xl max-w-xs sm:max-w-md w-full p-5 shadow-2xl text-center space-y-3.5 border border-farm-200">
+            <div class="flex items-center justify-between border-b border-farm-200 pb-2.5">
+                <h3 class="text-base font-bold font-serif text-farm-900">Customer Payment Proof</h3>
+                <button onclick="toggleModal('view-proof-modal', false)" class="text-farm-400 hover:text-farm-700 p-1">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
             <div class="p-2 bg-farm-50 rounded-2xl border border-farm-200">
-                <img id="admin-proof-modal-img" src="" class="max-h-96 w-full object-contain rounded-xl mx-auto">
+                <img id="admin-proof-modal-img" src="" class="max-h-80 w-full object-contain rounded-xl mx-auto">
             </div>
             <button onclick="toggleModal('view-proof-modal', false)" class="w-full py-2.5 bg-farm-700 text-white font-bold rounded-xl text-xs">
                 Close Preview
@@ -632,7 +659,7 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // Obfuscated Security PIN Key Verification Target
+        // Security PIN Hash Target ("hechanovafarm1982")
         const _secTarget = "aGVjaGFub3ZhZmFybTE5ODI=";
 
         // ================= DEFAULT MENU DATA =================
@@ -705,14 +732,13 @@
                 if (data) {
                     state.menu = Object.values(data);
                 } else {
-                    // Seed database with defaults if empty
                     state.menu = DEFAULT_MENU;
                     saveMenuToStorage();
                 }
                 renderAll();
             });
 
-            // Listen for Incoming Customer Orders in Realtime
+            // Listen for Customer Orders in Realtime
             db.ref('orders').on('value', (snapshot) => {
                 const data = snapshot.val();
                 if (data) {
@@ -759,7 +785,7 @@
             const container = document.getElementById('category-bar');
             
             container.innerHTML = categories.map(cat => `
-                <button onclick="setCategory('${cat}')" class="px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
+                <button onclick="setCategory('${cat}')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold whitespace-nowrap transition-all ${
                     state.currentCategory === cat 
                         ? 'bg-farm-700 text-white shadow-md' 
                         : 'bg-white text-farm-800 hover:bg-farm-100 border border-farm-200'
@@ -795,35 +821,47 @@
             }
 
             grid.innerHTML = filtered.map(item => `
-                <div class="bg-white rounded-2xl border border-farm-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-col justify-between ${!item.available ? 'opacity-75' : ''}">
-                    <div>
-                        <div class="relative h-44 w-full bg-farm-100 overflow-hidden">
+                <div class="bg-white rounded-2xl border border-farm-200 overflow-hidden shadow-sm hover:shadow-md transition-all flex flex-row sm:flex-col justify-between ${!item.available ? 'opacity-75' : ''}">
+                    <div class="flex flex-row sm:flex-col flex-1">
+                        <div class="relative w-28 h-28 sm:w-full sm:h-44 bg-farm-100 overflow-hidden shrink-0">
                             <img src="${item.image || 'https://placehold.co/600x400?text=Hechanova+Farm'}" 
                                  alt="${item.title}" 
                                  onerror="this.src='https://placehold.co/600x400?text=Farm+Product'"
-                                 class="w-full h-full object-cover transition-transform duration-500 hover:scale-105">
+                                 class="w-full h-full object-cover">
                             
-                            <span class="absolute top-3 left-3 bg-farm-900/80 backdrop-blur-md text-white text-[10px] font-bold px-2.5 py-1 rounded-lg">
+                            <span class="hidden sm:inline-block absolute top-2.5 left-2.5 bg-farm-900/80 backdrop-blur-md text-white text-[9px] font-bold px-2 py-0.5 rounded-md">
                                 ${item.category}
                             </span>
 
-                            <span class="absolute top-3 right-3 text-[10px] font-bold px-2.5 py-1 rounded-lg ${
+                            <span class="absolute top-2 right-2 sm:top-2.5 sm:right-2.5 text-[9px] font-bold px-2 py-0.5 rounded-md ${
                                 item.available ? 'bg-emerald-600 text-white shadow' : 'bg-red-600 text-white shadow'
                             }">
                                 ${item.available ? 'In Stock' : 'Sold Out'}
                             </span>
                         </div>
 
-                        <div class="p-4 space-y-1.5">
-                            <div class="flex justify-between items-start">
-                                <h3 class="font-bold font-serif text-farm-900 text-base leading-snug">${item.title}</h3>
-                                <span class="font-black text-amber-600 text-base ml-2 whitespace-nowrap">₱${item.price.toFixed(2)}</span>
+                        <div class="p-3 sm:p-4 flex-1 flex flex-col justify-between">
+                            <div>
+                                <div class="flex justify-between items-start gap-1">
+                                    <h3 class="font-bold font-serif text-farm-900 text-xs sm:text-base leading-snug line-clamp-2">${item.title}</h3>
+                                </div>
+                                <p class="text-[11px] sm:text-xs text-farm-600 line-clamp-2 sm:line-clamp-2 mt-1">${item.description || 'Fresh farm-raised product.'}</p>
                             </div>
-                            <p class="text-xs text-farm-600 line-clamp-2 leading-relaxed">${item.description || 'Fresh farm-raised product.'}</p>
+                            <div class="mt-2 flex items-center justify-between sm:hidden">
+                                <span class="font-black text-amber-600 text-sm">₱${item.price.toFixed(2)}</span>
+                                <button onclick="addToCart('${item.id}')" ${!item.available ? 'disabled' : ''} 
+                                        class="px-3 py-1.5 bg-farm-700 hover:bg-farm-800 disabled:bg-stone-200 text-white text-xs font-bold rounded-xl transition-all">
+                                    + Add
+                                </button>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="p-4 pt-0">
+                    <div class="hidden sm:block p-4 pt-0">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="font-black text-amber-600 text-base">₱${item.price.toFixed(2)}</span>
+                            <span class="text-[10px] font-bold text-farm-500 uppercase">${item.category}</span>
+                        </div>
                         <button onclick="addToCart('${item.id}')" ${!item.available ? 'disabled' : ''} 
                                 class="w-full py-2.5 px-4 bg-farm-100 hover:bg-farm-700 hover:text-white disabled:bg-farm-100 disabled:text-farm-300 disabled:cursor-not-allowed text-farm-900 font-bold text-xs rounded-xl transition-all flex items-center justify-center gap-2 border border-farm-200">
                             <i class="fa-solid fa-cart-plus"></i>
@@ -871,14 +909,22 @@
             const totalItemCount = state.cart.reduce((sum, item) => sum + item.qty, 0);
             const subtotal = state.cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
 
-            document.getElementById('cart-badge-count').innerText = totalItemCount;
             document.getElementById('sidebar-cart-badge').innerText = `${totalItemCount} Items`;
             
             document.getElementById('cart-subtotal').innerText = `₱${subtotal.toFixed(2)}`;
             document.getElementById('cart-total').innerText = `₱${subtotal.toFixed(2)}`;
             document.getElementById('drawer-cart-total').innerText = `₱${subtotal.toFixed(2)}`;
 
-            const checkoutBtns = [document.getElementById('checkout-btn'), document.getElementById('drawer-checkout-btn')];
+            // Update Mobile Floating Action Bar
+            document.getElementById('mobile-float-badge').innerText = totalItemCount;
+            document.getElementById('mobile-float-total').innerText = `₱${subtotal.toFixed(2)}`;
+            
+            const checkoutBtns = [
+                document.getElementById('checkout-btn'), 
+                document.getElementById('drawer-checkout-btn'),
+                document.getElementById('mobile-float-checkout-btn')
+            ];
+            
             checkoutBtns.forEach(btn => {
                 if (btn) btn.disabled = state.cart.length === 0;
             });
@@ -888,8 +934,8 @@
                 
                 if (state.cart.length === 0) {
                     container.innerHTML = `
-                        <div class="text-center py-10 text-farm-400 space-y-2">
-                            <i class="fa-solid fa-basket-shopping text-3xl"></i>
+                        <div class="text-center py-8 text-farm-400 space-y-1.5">
+                            <i class="fa-solid fa-basket-shopping text-2xl"></i>
                             <p class="text-xs font-medium">Your basket is empty</p>
                         </div>
                     `;
@@ -897,18 +943,18 @@
                 }
 
                 container.innerHTML = state.cart.map(item => `
-                    <div class="flex items-center justify-between p-3 bg-farm-50 rounded-xl border border-farm-200">
+                    <div class="flex items-center justify-between p-2.5 bg-farm-50 rounded-xl border border-farm-200">
                         <div class="flex-1 pr-2">
                             <div class="text-xs font-bold text-farm-900">${item.title}</div>
                             <div class="text-[11px] text-amber-600 font-bold">₱${(item.price * item.qty).toFixed(2)}</div>
                         </div>
-                        <div class="flex items-center gap-2 bg-white px-2 py-1 rounded-lg border border-farm-200">
-                            <button onclick="updateCartQty('${item.id}', -1)" class="text-farm-600 hover:text-red-600 text-xs px-1">
-                                <i class="fa-solid fa-minus"></i>
+                        <div class="flex items-center gap-1.5 bg-white px-2 py-1 rounded-lg border border-farm-200">
+                            <button onclick="updateCartQty('${item.id}', -1)" class="text-farm-600 hover:text-red-600 text-xs px-1.5 py-0.5">
+                                <i class="fa-solid fa-minus text-[10px]"></i>
                             </button>
-                            <span class="text-xs font-bold text-farm-900 min-w-[16px] text-center">${item.qty}</span>
-                            <button onclick="updateCartQty('${item.id}', 1)" class="text-farm-600 hover:text-emerald-600 text-xs px-1">
-                                <i class="fa-solid fa-plus"></i>
+                            <span class="text-xs font-bold text-farm-900 min-w-[14px] text-center">${item.qty}</span>
+                            <button onclick="updateCartQty('${item.id}', 1)" class="text-farm-600 hover:text-emerald-600 text-xs px-1.5 py-0.5">
+                                <i class="fa-solid fa-plus text-[10px]"></i>
                             </button>
                         </div>
                     </div>
@@ -989,7 +1035,6 @@
         }
 
         function completeOrderPlacement(order) {
-            // Push order to Firebase Database
             db.ref('orders/' + order.id).set(order);
 
             renderReceiptModal(order);
@@ -1012,9 +1057,9 @@
             const tbody = document.getElementById('receipt-items-body');
             tbody.innerHTML = order.items.map(i => `
                 <tr class="text-farm-800">
-                    <td class="py-1.5 font-medium">${i.title}</td>
-                    <td class="py-1.5 text-center font-bold">x${i.qty}</td>
-                    <td class="py-1.5 text-right font-bold">₱${(i.price * i.qty).toFixed(2)}</td>
+                    <td class="py-1 font-medium">${i.title}</td>
+                    <td class="py-1 text-center font-bold">x${i.qty}</td>
+                    <td class="py-1 text-right font-bold">₱${(i.price * i.qty).toFixed(2)}</td>
                 </tr>
             `).join('');
 
@@ -1056,13 +1101,13 @@
             if (tab === 'orders') {
                 ordersTab.classList.remove('hidden');
                 inventoryTab.classList.add('hidden');
-                btnOrders.className = 'pb-3 text-sm font-bold border-b-2 border-farm-700 text-farm-700 transition-all flex items-center gap-2';
-                btnInventory.className = 'pb-3 text-sm font-bold border-b-2 border-transparent text-farm-500 hover:text-farm-800 transition-all flex items-center gap-2';
+                btnOrders.className = 'pb-2.5 text-xs sm:text-sm font-bold border-b-2 border-farm-700 text-farm-700 transition-all flex items-center gap-1.5';
+                btnInventory.className = 'pb-2.5 text-xs sm:text-sm font-bold border-b-2 border-transparent text-farm-500 hover:text-farm-800 transition-all flex items-center gap-1.5';
             } else {
                 ordersTab.classList.add('hidden');
                 inventoryTab.classList.remove('hidden');
-                btnInventory.className = 'pb-3 text-sm font-bold border-b-2 border-farm-700 text-farm-700 transition-all flex items-center gap-2';
-                btnOrders.className = 'pb-3 text-sm font-bold border-b-2 border-transparent text-farm-500 hover:text-farm-800 transition-all flex items-center gap-2';
+                btnInventory.className = 'pb-2.5 text-xs sm:text-sm font-bold border-b-2 border-farm-700 text-farm-700 transition-all flex items-center gap-1.5';
+                btnOrders.className = 'pb-2.5 text-xs sm:text-sm font-bold border-b-2 border-transparent text-farm-500 hover:text-farm-800 transition-all flex items-center gap-1.5';
             }
         }
 
@@ -1075,7 +1120,7 @@
             const order = state.orders.find(o => o.id === orderId);
             if (order) {
                 if (order.status === 'Completed' && newStatus === 'Cancelled') {
-                    alert('Completed orders cannot be cancelled. You can delete the order if necessary.');
+                    alert('Completed orders cannot be cancelled.');
                     return;
                 }
                 order.status = newStatus;
@@ -1084,13 +1129,13 @@
         }
 
         function deleteOrder(orderId) {
-            if (confirm(`Are you sure you want to delete order #${orderId}? If this order was Completed, it will also be removed from total revenue.`)) {
+            if (confirm(`Delete order #${orderId}?`)) {
                 db.ref('orders/' + orderId).remove();
             }
         }
 
         function clearAllSalesHistory() {
-            if (confirm('Are you sure you want to CLEAR ALL sales history? This action will erase all orders and reset total revenue to ₱0.00.')) {
+            if (confirm('CLEAR ALL sales history? This action cannot be undone.')) {
                 db.ref('orders').remove();
             }
         }
@@ -1125,61 +1170,60 @@
             };
 
             container.innerHTML = filtered.map(order => `
-                <div class="bg-white rounded-2xl border border-farm-200 p-5 shadow-sm space-y-4 relative group">
-                    <div class="flex items-center justify-between pb-3 border-b border-farm-100">
+                <div class="bg-white rounded-2xl border border-farm-200 p-4 shadow-sm space-y-3 relative">
+                    <div class="flex items-center justify-between pb-2 border-b border-farm-100">
                         <div>
                             <span class="font-mono text-xs font-bold text-farm-500 block">#${order.id}</span>
-                            <span class="text-xs text-stone-500">${order.date}</span>
+                            <span class="text-[10px] text-stone-500">${order.date}</span>
                         </div>
-                        <div class="flex items-center gap-2">
-                            <span class="px-2.5 py-1 rounded-full text-xs font-bold border ${statusColors[order.status] || 'bg-farm-100 text-farm-800'}">
+                        <div class="flex items-center gap-1.5">
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold border ${statusColors[order.status] || 'bg-farm-100 text-farm-800'}">
                                 ${order.status}
                             </span>
-                            <button onclick="deleteOrder('${order.id}')" title="Delete Order" class="p-1.5 text-stone-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
+                            <button onclick="deleteOrder('${order.id}')" class="p-1 text-stone-400 hover:text-red-600">
                                 <i class="fa-solid fa-trash text-xs"></i>
                             </button>
                         </div>
                     </div>
 
-                    <div class="space-y-1 text-xs">
-                        <p class="font-bold text-farm-900 text-sm">${order.customer.name} (${order.customer.phone})</p>
-                        <p class="text-farm-700"><strong class="text-farm-900">Details:</strong> ${order.orderType} - ${order.customer.address}</p>
-                        <p class="text-farm-700"><strong class="text-farm-900">Payment:</strong> ${order.paymentMethod}</p>
-                        ${order.notes ? `<p class="text-farm-800 bg-farm-50 p-2 rounded-lg mt-1 italic border border-farm-200">"${order.notes}"</p>` : ''}
+                    <div class="space-y-0.5 text-xs">
+                        <p class="font-bold text-farm-900">${order.customer.name} (${order.customer.phone})</p>
+                        <p class="text-farm-700 text-[11px]"><strong class="text-farm-900">Details:</strong> ${order.orderType} - ${order.customer.address}</p>
+                        <p class="text-farm-700 text-[11px]"><strong class="text-farm-900">Payment:</strong> ${order.paymentMethod}</p>
+                        ${order.notes ? `<p class="text-farm-800 bg-farm-50 p-1.5 rounded-lg text-[11px] italic border border-farm-200 mt-1">"${order.notes}"</p>` : ''}
                     </div>
 
                     ${order.paymentProof ? `
-                        <div class="p-2.5 bg-amber-50 rounded-xl border border-amber-200 flex items-center justify-between">
+                        <div class="p-2 bg-amber-50 rounded-xl border border-amber-200 flex items-center justify-between">
                             <div class="flex items-center gap-2">
-                                <img src="${order.paymentProof}" class="w-10 h-10 object-cover rounded-lg border border-amber-300">
-                                <span class="text-xs font-bold text-amber-900">Payment Proof Attached</span>
+                                <img src="${order.paymentProof}" class="w-8 h-8 object-cover rounded-lg border border-amber-300">
+                                <span class="text-[11px] font-bold text-amber-900">Payment Proof</span>
                             </div>
-                            <button onclick="openProofModal('${order.paymentProof}')" class="px-2.5 py-1 bg-amber-600 hover:bg-amber-700 text-white font-bold rounded-lg text-[11px]">
+                            <button onclick="openProofModal('${order.paymentProof}')" class="px-2 py-1 bg-amber-600 text-white font-bold rounded-lg text-[10px]">
                                 View
                             </button>
                         </div>
                     ` : ''}
 
-                    <div class="border-t border-farm-100 pt-3">
-                        <div class="text-xs font-bold text-farm-700 uppercase mb-2">Items:</div>
-                        <ul class="space-y-1 text-xs text-farm-800">
+                    <div class="border-t border-farm-100 pt-2">
+                        <ul class="space-y-0.5 text-[11px] text-farm-800">
                             ${order.items.map(i => `<li class="flex justify-between"><span>${i.qty}x ${i.title}</span><span class="font-bold">₱${(i.price * i.qty).toFixed(2)}</span></li>`).join('')}
                         </ul>
-                        <div class="flex justify-between font-extrabold text-farm-900 text-sm mt-3 pt-2 border-t border-farm-100">
-                            <span>Total Amount</span>
+                        <div class="flex justify-between font-extrabold text-farm-900 text-xs mt-2 pt-1.5 border-t border-farm-100">
+                            <span>Total</span>
                             <span class="text-amber-600">₱${order.total.toFixed(2)}</span>
                         </div>
                     </div>
 
-                    <div class="pt-2 flex flex-wrap gap-1.5 border-t border-farm-100">
-                        <button onclick="updateOrderStatus('${order.id}', 'Confirmed')" class="flex-1 py-1.5 px-2 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded-lg text-[11px] transition-all border border-blue-200">
+                    <div class="pt-1 flex gap-1.5 border-t border-farm-100">
+                        <button onclick="updateOrderStatus('${order.id}', 'Confirmed')" class="flex-1 py-1 px-2 bg-blue-50 hover:bg-blue-100 text-blue-700 font-bold rounded-lg text-[10px] border border-blue-200">
                             Confirmed
                         </button>
-                        <button onclick="updateOrderStatus('${order.id}', 'Completed')" class="flex-1 py-1.5 px-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-lg text-[11px] transition-all border border-emerald-200">
+                        <button onclick="updateOrderStatus('${order.id}', 'Completed')" class="flex-1 py-1 px-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-lg text-[10px] border border-emerald-200">
                             Completed
                         </button>
                         ${order.status !== 'Completed' ? `
-                            <button onclick="updateOrderStatus('${order.id}', 'Cancelled')" class="py-1.5 px-2 bg-farm-100 hover:bg-red-50 text-farm-700 hover:text-red-600 font-bold rounded-lg text-[11px] transition-all border border-farm-200">
+                            <button onclick="updateOrderStatus('${order.id}', 'Cancelled')" class="py-1 px-2 bg-farm-100 text-farm-700 hover:text-red-600 font-bold rounded-lg text-[10px] border border-farm-200">
                                 Cancel
                             </button>
                         ` : ''}
@@ -1192,29 +1236,28 @@
             const tbody = document.getElementById('admin-inventory-table-body');
             tbody.innerHTML = state.menu.map(item => `
                 <tr class="hover:bg-farm-50 transition-all">
-                    <td class="p-4 font-bold text-farm-900 flex items-center gap-3">
-                        <img src="${item.image || 'https://placehold.co/100'}" class="w-10 h-10 rounded-lg object-cover border border-farm-200">
+                    <td class="p-3 font-bold text-farm-900 flex items-center gap-2">
+                        <img src="${item.image || 'https://placehold.co/100'}" class="w-8 h-8 rounded-lg object-cover border border-farm-200">
                         <div>
                             <div>${item.title}</div>
-                            <div class="text-xs text-farm-500 font-normal line-clamp-1">${item.description || ''}</div>
                         </div>
                     </td>
-                    <td class="p-4"><span class="px-2 py-1 bg-farm-100 text-farm-800 rounded-md text-xs font-bold border border-farm-200">${item.category}</span></td>
-                    <td class="p-4 font-black text-amber-600">₱${item.price.toFixed(2)}</td>
-                    <td class="p-4">
-                        <button onclick="toggleItemStock('${item.id}')" class="px-2.5 py-1 rounded-full text-xs font-bold transition-all ${
+                    <td class="p-3"><span class="px-2 py-0.5 bg-farm-100 text-farm-800 rounded-md text-[10px] font-bold border border-farm-200">${item.category}</span></td>
+                    <td class="p-3 font-black text-amber-600">₱${item.price.toFixed(2)}</td>
+                    <td class="p-3">
+                        <button onclick="toggleItemStock('${item.id}')" class="px-2 py-0.5 rounded-full text-[10px] font-bold transition-all ${
                             item.available 
-                                ? 'bg-emerald-100 text-emerald-800 hover:bg-emerald-200 border border-emerald-300' 
-                                : 'bg-red-100 text-red-800 hover:bg-red-200 border border-red-300'
+                                ? 'bg-emerald-100 text-emerald-800 border border-emerald-300' 
+                                : 'bg-red-100 text-red-800 border border-red-300'
                         }">
                             ${item.available ? 'In Stock' : 'Out of Stock'}
                         </button>
                     </td>
-                    <td class="p-4 text-right space-x-2">
-                        <button onclick="openMenuEditorModal('${item.id}')" class="p-2 text-farm-600 hover:text-farm-900 hover:bg-farm-100 rounded-lg transition-all">
+                    <td class="p-3 text-right space-x-1">
+                        <button onclick="openMenuEditorModal('${item.id}')" class="p-1 text-farm-600 hover:text-farm-900">
                             <i class="fa-solid fa-pen-to-square"></i>
                         </button>
-                        <button onclick="deleteMenuItem('${item.id}')" class="p-2 text-farm-600 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all">
+                        <button onclick="deleteMenuItem('${item.id}')" class="p-1 text-farm-600 hover:text-red-600">
                             <i class="fa-solid fa-trash"></i>
                         </button>
                     </td>
@@ -1375,17 +1418,20 @@
             const adminView = document.getElementById('admin-view');
             const btnCust = document.getElementById('nav-customer-btn');
             const btnAdmin = document.getElementById('nav-admin-btn');
+            const floatingCart = document.getElementById('mobile-floating-cart');
 
             if (view === 'customer') {
                 custView.classList.remove('hidden');
                 adminView.classList.add('hidden');
-                btnCust.className = 'px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all bg-farm-700 text-white shadow-sm';
-                btnAdmin.className = 'px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-farm-800 hover:text-farm-900 transition-all';
+                if (floatingCart) floatingCart.classList.remove('hidden');
+                btnCust.className = 'px-2.5 sm:px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all bg-farm-700 text-white shadow-sm';
+                btnAdmin.className = 'px-2.5 sm:px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-farm-800 hover:text-farm-900 transition-all';
             } else {
                 custView.classList.add('hidden');
                 adminView.classList.remove('hidden');
-                btnAdmin.className = 'px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all bg-farm-700 text-white shadow-sm';
-                btnCust.className = 'px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-farm-800 hover:text-farm-900 transition-all';
+                if (floatingCart) floatingCart.classList.add('hidden');
+                btnAdmin.className = 'px-2.5 sm:px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-lg transition-all bg-farm-700 text-white shadow-sm';
+                btnCust.className = 'px-2.5 sm:px-3.5 py-1.5 text-xs sm:text-sm font-bold rounded-lg text-farm-800 hover:text-farm-900 transition-all';
             }
         }
 
