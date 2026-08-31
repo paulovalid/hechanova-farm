@@ -732,8 +732,8 @@
                 if (data) {
                     state.menu = Object.values(data);
                 } else {
+                    // Load defaults locally if Firebase has no menu entries, but DO NOT overwrite DB automatically
                     state.menu = DEFAULT_MENU;
-                    saveMenuToStorage();
                 }
                 renderAll();
             });
@@ -1338,8 +1338,9 @@
                     state.menu[idx] = { id, title, price, category, image: finalImage, description, available };
                 }
             } else {
+                const newRefKey = db.ref('menu').push().key;
                 const newItem = {
-                    id: 'hf-' + Date.now(),
+                    id: newRefKey || ('hf-' + Date.now()),
                     title,
                     price,
                     category,
@@ -1355,8 +1356,10 @@
         }
 
         function deleteMenuItem(itemId) {
-            state.menu = state.menu.filter(m => m.id !== itemId);
-            saveMenuToStorage();
+            if (confirm('Are you sure you want to delete this product?')) {
+                state.menu = state.menu.filter(m => m.id !== itemId);
+                saveMenuToStorage();
+            }
         }
 
         function openQrSettingsModal() {
